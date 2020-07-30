@@ -1,0 +1,54 @@
+﻿@model PTCViewModel
+
+@{
+  ViewBag.Title = "Cecilio's Training Company";
+}
+
+@using (Html.BeginForm()) {
+  @Html.HiddenFor(m => m.EventAction, new { data_val = "false" })
+  @Html.HiddenFor(m => m.EventArgument, new { data_val = "false" })
+  @Html.HiddenFor(m => m.PageMode, new { data_val = "false" })
+
+  if (Model.PageMode == PDSAPageModeEnum.List) {
+    @Html.Partial("_ProductList", Model)
+  }
+
+  if (Model.PageMode == PDSAPageModeEnum.Add ||
+      Model.PageMode == PDSAPageModeEnum.Edit) {
+    @Html.Partial("_ProductDetail", Model)
+  }
+}
+
+
+@section scripts {
+  <script>
+    $(document).ready(function () {
+      // Connect to any elements that have 'data-pdsa-action'
+      $("[data-pdsa-action]").on("click", function (e) {
+        var deletelabel = '';
+        var submit = true;
+        e.preventDefault();
+
+        // Check for Delete
+        if ($(this).data("pdsa-action") === "delete") {
+          deletelabel = $(this).data("pdsa-deletelabel");
+          if (!deletelabel) {
+            deletelabel = 'Record';
+          }
+          if (!confirm("Delete this " + deletelabel + "?")) {
+            submit = false;
+          }
+        }
+
+        // Fill in hidden fields with action and argument to post back to model
+        $("#EventAction").val($(this).data("pdsa-action"));
+        $("#EventArgument").val($(this).data("pdsa-arg"));
+
+        if (submit) {
+          // Submit form with hidden values filled in
+          $("form").submit();
+        }
+      });
+    });
+  </script>
+}
