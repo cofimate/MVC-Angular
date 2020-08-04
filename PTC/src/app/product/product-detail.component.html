@@ -1,0 +1,118 @@
+﻿<form #productForm="ngForm">
+  <div class="row" *ngIf="product">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h1 class="panel-title">Product Information</h1>
+        </div>
+        <div class="panel-body">
+          <!-- ** BEGIN: Error Message Area ** -->
+          <div class="row"
+               *ngIf="messages && messages.length ||
+               (productForm.form.touched && !productForm.form.valid)">
+            <div class="col-xs-12">
+              <div class="alert alert-warning">
+                <ul>
+                  <li *ngFor="let msg of messages">
+                    {{msg}}
+                  </li>
+                  <li [hidden]="!productName.errors?.required">Product Name is required</li>
+                  <li [hidden]="!productName.errors?.validateNotlowercase">Product Name must not be all lower case</li>
+                  <li [hidden]="!productName.errors?.minlength">Product Name must be at least 4 characters.</li>
+                  <li [hidden]="!productName.errors?.maxlength">Product Name must be 50 characters or less.</li>
+                  <li [hidden]="!introductionDate.errors?.required">Introduction Date is required</li>
+                  <li [hidden]="!price.errors?.required">Price is required</li>
+                  <li [hidden]="!price.errors?.min">Price must be greater than 0.00</li>
+                  <li [hidden]="!price.errors?.max">Price must be less than or equal to 10,000</li>
+                  <li [hidden]="!url.errors?.required">URL is required</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- ** END: Error Message Area ** -->
+          <!-- ** BEGIN: Detail Entry Area ** -->
+          <div class="form-group">
+            <label for="categoryId">Category ID</label>
+            <select id="categoryId"
+                    name="categoryId"
+                    [(ngModel)]="product.categoryId"
+                    class="form-control">
+              <option *ngFor="let cat of categories"
+                      value="{{cat.categoryId}}">
+                {{cat.categoryName}}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="productName">Product Name</label>
+            <input id="productName"
+                   name="productName"
+                   #productName="ngModel"
+                   required
+                   validateNotlowercase
+                   minlength="4"
+                   maxlength="50"
+                   type="text"
+                   class="form-control"
+                   autofocus="autofocus"
+                   placeholder="Enter the Product Name"
+                   title="Enter the Product Name"
+                   [(ngModel)]="product.productName" />
+          </div>
+          <div class="form-group">
+            <label for="introductionDate">
+              Introduction Date
+            </label>
+            <input id="introductionDate"
+                   name="introductionDate"
+                   #introductionDate
+                   required
+                   type="text"
+                   class="form-control"
+                   placeholder="Enter the Introduction Date"
+                   title="Enter the Introduction Date"
+                   [(ngModel)]="product.introductionDate" />
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input id="price"
+                   name="price"
+                   #price="ngModel"
+                   Required
+                   [min]="0"
+                   [max]="10000"
+                   type="number"
+                   class="form-control"
+                   placeholder="Enter the Price"
+                   title="Enter the Price"
+                   [(ngModel)]="product.price" />
+          </div>
+          <div class="form-group">
+            <label for="url">URL</label>
+            <input id="url"
+                   name="url"
+                   #url="ngModel"
+                   required
+                   type="url"
+                   class="form-control"
+                   placeholder="Enter the URL"
+                   title="Enter the URL"
+                   [(ngModel)]="product.url" />
+          </div>
+          <!-- ** END: Detail Entry Area ** -->
+        </div>
+        <div class="panel-footer">
+          <button class="btn btn-success"
+                  [disabled]="!productForm.form.valid"
+                  (click)="saveProduct()">
+            Save
+          </button>
+          <button class="btn btn-primary"
+                  (click)="goBack()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
